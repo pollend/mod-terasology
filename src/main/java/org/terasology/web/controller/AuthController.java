@@ -27,6 +27,11 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public  String registerUser() {
+        return "hello";
+    }
+
     @RequestMapping(value = "/auth/register", method = RequestMethod.POST)
     @ResponseBody
     public  ResponseEntity<UserResource> registerUser(@ModelAttribute("user") @Valid UserDto user, BindingResult result) {

@@ -3,6 +3,7 @@ package org.terasology.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -18,9 +19,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.terasology.security.UserDetailServiceImpl;
 
 @Configuration
+@ComponentScan(basePackages = { "org.terasology.security" })
 @EnableWebSecurity
-@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    public SecurityConfig() {
+        super();
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -30,10 +38,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeRequests()
+        .authorizeRequests()
+            .antMatchers("/login*","/").permitAll()
         .and()
-        .formLogin()
-        .permitAll();
+            .formLogin()
+            .loginPage("/login")
+        .and()
+            .logout();
 
     }
 
@@ -47,15 +58,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new SessionRegistryImpl();
     }
 
-    @Bean UserDetailsService userProvider(){
-        return new UserDetailServiceImpl();
-    }
-
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider
                 = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(new UserDetailServiceImpl());
+        authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(encoder());
         return authProvider;
     }

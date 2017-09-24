@@ -1,6 +1,7 @@
 package org.terasology.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,9 +10,11 @@ import org.springframework.stereotype.Service;
 import org.terasology.persistence.model.User;
 import org.terasology.persistence.repository.UserRepository;
 
+import javax.transaction.Transactional;
 import java.util.Arrays;
 
 @Service
+@Transactional
 public class UserDetailServiceImpl implements UserDetailsService {
 
     @Autowired

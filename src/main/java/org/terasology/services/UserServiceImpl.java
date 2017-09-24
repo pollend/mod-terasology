@@ -1,11 +1,7 @@
 package org.terasology.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.terasology.config.AppConfig;
@@ -15,11 +11,9 @@ import org.terasology.persistence.model.VerificationToken;
 import org.terasology.persistence.repository.PasswordResetTokenRepository;
 import org.terasology.persistence.repository.UserRepository;
 import org.terasology.persistence.repository.VerificationTokenRepository;
-import org.terasology.services.TokenStatus;
 import org.terasology.web.dto.UserDto;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.UUID;
 
